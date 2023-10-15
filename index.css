@@ -1,10 +1,11 @@
+/* Nasa background to make whoever is playing more engaged */
 body {
   background-image: url("assets/nasa-CzigtQ8gPi4-unsplash.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   
 }
-
+/* Title of my game */
 .game-menu {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center;
