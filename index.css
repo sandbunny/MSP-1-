@@ -1,0 +1,14 @@
+body {
+  background-image: url("assets/nasa-CzigtQ8gPi4-unsplash.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+}
+
+.game-menu {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  text-align: center;
+  font-size: 250px;
+  color: rgb(255, 255, 255);
+text-shadow:  2px 20px 20px rgba(18, 185, 135, 0.76);
+}
