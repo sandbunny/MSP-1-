@@ -3,7 +3,7 @@ body {
   background-image: url("assets/nasa-CzigtQ8gPi4-unsplash.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  
+  text-align: center;
 }
 /* Title of my game */
 .game-menu {
@@ -12,4 +12,8 @@ body {
   font-size: 50px;
   color: rgb(255, 255, 255);
 text-shadow:  2px 20px 16px rgba(18, 185, 135, 0.76);
+}
+
+#board {
+  background-color: black;
 }
