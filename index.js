@@ -9,7 +9,7 @@ let boardHeight = tileSize * rows; // 32 * 16
 let context;
 
 //ship
-let shipWidth = tileSize * 2;
+let shipWidth = tileSize * 4;
 let shipHeight = tileSize;
 let shipX = (tileSize * columns) / 2 - tileSize;
 let shipY = tileSize * rows - tileSize * 2;
@@ -26,7 +26,7 @@ let shipVelocityX = tileSize; // ship movement speed
 
 // aliens
 let alienArray = [];
-let alienWidth = tileSize * 2;
+let alienWidth = tileSize * 1.5;
 let alienHeight = tileSize;
 let alienX = tileSize;
 let alienY = tileSize;
@@ -36,6 +36,11 @@ let alienRows = 2;
 let alienColumns = 3;
 let alienCount = 0; //number of aliens to defeat
 let alienVelocityX = 1; // movement speed for aliens
+
+//bullets
+let bulletArray = [];
+let bulletVelocityY = -10 //bullet moving speed.... its negative 10 because we are moving up
+
 
 window.onload = function () {
   board = document.getElementById("board");
@@ -119,3 +124,10 @@ function createAliens() {
 }
 //there are 2 rows of aliens and in each row there are 3 aliens
 // each alien has a height and width of 1 tile size and a width of 2 tile sizes
+// ship has a width of 2 *tilesize(64)(coordinate of the ships top left corner)'ship.x',  at the center of the game board is (224)
+// width of 1 'shipVelocityX' is 1 tileSize(32)
+// the game board has a width of tilesize(32) * columns(16) = 512
+// when u move the ship to the left 1 tilesize by pressing left arrow 1 time, you are substracting shipVelocityX(32) from ship.x(224)
+// (224 -32)=192,when u move left again(192-32)=160,when u move again(160-32) =128.....when ship.x(32) - shipVelocityX(32) = 0, after this the ship has reached the left border of the board 
+// then the event listener on arrowleft stops working and u cant move the ship to the left no more
+
