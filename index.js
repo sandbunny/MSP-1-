@@ -24,6 +24,19 @@ let ship = {
 let shipImg;
 let shipVelocityX = tileSize; // ship movement speed
 
+// aliens
+let alienArray = [];
+let alienWidth = tileSize * 2;
+let alienHeight = tileSize;
+let alienX = tileSize;
+let alienY = tileSize;
+let alienImg;
+
+let alienRows = 2;
+let alienColumns = 3;
+let alienCount = 0; //number of aliens to defeat
+let alienVelocityX = 1; // movement speed for aliens
+
 window.onload = function () {
   board = document.getElementById("board");
   board.width = boardWidth;
@@ -43,6 +56,10 @@ window.onload = function () {
 
   requestAnimationFrame(update);
   document.addEventListener("keydown", moveShip);
+
+  alienImg = new Image();
+  alienImg.src = "assets/alien.png";
+  createAliens();
 };
 
 function update() {
@@ -51,6 +68,25 @@ function update() {
 
   //ship
   context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
+
+  // aliens
+  for (let i = 0; i < alienArray.length; i++) {
+    let alien = alienArray[i];
+    if (alien.alive) {
+      alien.x += alienVelocityX;
+      // if alien touches the borders
+      if (alien.x + alien.width >= board.width | alien.x <= 0) {
+        alienVelocityX *= -1;
+        alien.x += alienVelocityX*2;
+        
+        // move all aliens up by one row
+        for (let j = 0; j < alienArray.length; j++) {
+          alienArray[j].y += alienHeight;
+        }
+      }
+      context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
+    }
+  }
 }
 
 function moveShip(e) {
@@ -63,3 +99,23 @@ function moveShip(e) {
     ship.x += shipVelocityX; // moves the ship to the right
   }
 }
+
+function createAliens() {
+  for (let c = 0; c < alienColumns; c++) {
+    for (let r = 0; r < alienRows; r++) {
+      let alien = {
+        img : alienImg,
+        x : alienX + c*alienWidth,
+        y : alienY + r*alienHeight,
+        width: alienWidth,
+        height : alienHeight,
+        alive : true  
+      }
+      alienArray.push(alien);
+
+    }
+  }
+  alienCount = alienArray.length;
+}
+//there are 2 rows of aliens and in each row there are 3 aliens
+// each alien has a height and width of 1 tile size and a width of 2 tile sizes
