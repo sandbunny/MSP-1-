@@ -39,8 +39,11 @@ let alienVelocityX = 1; // movement speed for aliens
 
 //bullets
 let bulletArray = [];
-let bulletVelocityY = -10 //bullet moving speed.... its negative 10 because we are moving up
+let bulletVelocityY = -10; //bullet moving speed.... its negative 10 because we are moving up
 
+// score for game 
+let score = 0;
+let gameOver = false;
 
 window.onload = function () {
   board = document.getElementById("board");
@@ -61,6 +64,7 @@ window.onload = function () {
 
   requestAnimationFrame(update);
   document.addEventListener("keydown", moveShip);
+  document.addEventListener("keyup", shoot);
 
   alienImg = new Image();
   alienImg.src = "assets/alien.png";
@@ -69,6 +73,10 @@ window.onload = function () {
 
 function update() {
   requestAnimationFrame(update);
+
+  if (gameOver){
+    return;
+  }
   context.clearRect(0, 0, board.width, board.height);
 
   //ship
@@ -80,21 +88,69 @@ function update() {
     if (alien.alive) {
       alien.x += alienVelocityX;
       // if alien touches the borders
-      if (alien.x + alien.width >= board.width | alien.x <= 0) {
+      if (alien.x + alien.width >= board.width || alien.x <= 0) {
         alienVelocityX *= -1;
-        alien.x += alienVelocityX*2;
-        
+        alien.x += alienVelocityX * 2;
+
         // move all aliens up by one row
         for (let j = 0; j < alienArray.length; j++) {
           alienArray[j].y += alienHeight;
         }
       }
       context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
+
+      if (alien.y >= ship.y) {
+        gameOver = true;
+      }
     }
   }
-}
+
+  //bullets
+  for (let i = 0; i < bulletArray.length; i++) {
+    let bullet = bulletArray[i];
+    bullet.y += bulletVelocityY;
+    context.fillStyle = "white";
+    context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+
+    //bullet collision with aliens
+    for (let j = 0; j < alienArray.length; j++) {
+      let alien = alienArray[j];
+      if (!bullet.used && alien.alive && detectCollision(bullet, alien)) {
+        bullet.used = true;
+        alien.alive = false;
+        alienCount--;
+        score += 100;
+      } // the bullet has to be unused and the alien has to be alive
+    }
+  }
+
+  // while loop to clear my bullets when they leave the canvas
+  while (
+    bulletArray.length > 0 &&
+    (bulletArray[0].used || bulletArray[0].y < 0)
+  ) {
+    bulletArray.shift(); // removes the first element of the array
+  }
+  // next level of my game
+  if (alienCount == 0) {
+    //increase the number of aliens in columns and rows by 1
+    alienColumns = Math.min(alienColumns + 1, columns/2 - 2);
+   alienRows = Math.min(alienRows + 1, rows-4);   //cap at 16-4 = 12
+   alienVelocityX += 0.2; //increase movement speed of alien
+   alienArray = [];
+   bulletArray = [];
+   createAliens();                                                                                                        //the reason why im adding a min condition here is because if i keeping adding a new column of aliens im going to be passing the canvas width
+  }         
+           //score
+           context.fillStyle="white"; 
+           context.font="16px courier"; 
+           context.fillText(score, 5,  20);                                                                                                    // im going to take the number of columns divided by 2 and subtract 2 I divide by 2 because each alien width is 2 tile sizes and minus 2 so we can gurantee
+}                                                                                                                              // space for the alien so we can move left and right
 
 function moveShip(e) {
+  if(gameOver) {
+    return;
+  }
   if (e.code == "ArrowLeft" && ship.x - shipVelocityX >= 0) {
     ship.x -= shipVelocityX; // moves the ship to the left
   } else if (
@@ -109,15 +165,14 @@ function createAliens() {
   for (let c = 0; c < alienColumns; c++) {
     for (let r = 0; r < alienRows; r++) {
       let alien = {
-        img : alienImg,
-        x : alienX + c*alienWidth,
-        y : alienY + r*alienHeight,
+        img: alienImg,
+        x: alienX + c * alienWidth,
+        y: alienY + r * alienHeight,
         width: alienWidth,
-        height : alienHeight,
-        alive : true  
-      }
+        height: alienHeight,
+        alive: true,
+      };
       alienArray.push(alien);
-
     }
   }
   alienCount = alienArray.length;
@@ -128,6 +183,31 @@ function createAliens() {
 // width of 1 'shipVelocityX' is 1 tileSize(32)
 // the game board has a width of tilesize(32) * columns(16) = 512
 // when u move the ship to the left 1 tilesize by pressing left arrow 1 time, you are substracting shipVelocityX(32) from ship.x(224)
-// (224 -32)=192,when u move left again(192-32)=160,when u move again(160-32) =128.....when ship.x(32) - shipVelocityX(32) = 0, after this the ship has reached the left border of the board 
+// (224 -32)=192,when u move left again(192-32)=160,when u move again(160-32) =128.....when ship.x(32) - shipVelocityX(32) = 0, after this the ship has reached the left border of the board
 // then the event listener on arrowleft stops working and u cant move the ship to the left no more
 
+function shoot(e) {
+  if (gameOver) {
+    return;
+  }
+  if (e.code == "Space") {
+    // shoot
+    let bullet = {
+      x: ship.x + (shipWidth * 15) / 32,
+      y: ship.y,
+      width: tileSize / 8,
+      height: tileSize / 2,
+      used: false,
+    };
+    bulletArray.push(bullet);
+  }
+}
+
+function detectCollision(a, b) {
+  return (
+    a.x < b.x + b.width && // a's top right corner doesn't reach b's top right corner
+    a.x + a.width > b.x && //a's top right corner passes b's top left corner
+    a.y < b.y + b.height && // a's top left corner doesn't reach b's bottom left corner
+    a.y + a.height > b.y
+  ); // a's bottom left corner passes b's top left corner
+}
