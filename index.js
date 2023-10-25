@@ -166,11 +166,22 @@ function moveShip(e) {
   }
 }
 
+// defining multiple alien images for my project
+let alienImages = [];
+let alienImage1 = new Image();
+alienImage1.src = "assets/alien.png";
+alienImages.push(alienImage1);
+
+let alienImage2 = new Image();
+alienImage2.src = "assets/red.png";
+alienImages.push(alienImage2);
+
 function createAliens() {
   for (let c = 0; c < alienColumns; c++) {
     for (let r = 0; r < alienRows; r++) {
+      let randomImageIndex = Math.floor(Math.random() * alienImages.length);
       let alien = {
-        img: alienImg,
+        img: alienImages[randomImageIndex],
         x: alienX + c * alienWidth,
         y: alienY + r * alienHeight,
         width: alienWidth,
@@ -216,7 +227,3 @@ function detectCollision(a, b) {
     a.y + a.height > b.y
   ); // a's bottom left corner passes b's top left corner
 }
-
-
-
-
