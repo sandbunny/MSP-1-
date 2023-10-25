@@ -1,5 +1,5 @@
 // board
-let tileSize = 32;
+let tileSize = 42;
 let rows = 16;
 let columns = 16;
 
@@ -26,7 +26,7 @@ let shipVelocityX = tileSize; // ship movement speed
 
 // aliens
 let alienArray = [];
-let alienWidth = tileSize * 1.5;
+let alienWidth = tileSize * 2;
 let alienHeight = tileSize;
 let alienX = tileSize;
 let alienY = tileSize;
@@ -41,19 +41,22 @@ let alienVelocityX = 1; // movement speed for aliens
 let bulletArray = [];
 let bulletVelocityY = -10; //bullet moving speed.... its negative 10 because we are moving up
 
-// score for game 
+// score for game
 let score = 0;
 let gameOver = false;
+let messageDiv;
 
 window.onload = function () {
   board = document.getElementById("board");
   board.width = boardWidth;
   board.height = boardHeight;
   context = board.getContext("2d"); // used for drawing on the board
+  messageDiv = document.getElementById("message");
+  messageDiv.setAttribute("hidden", true);
 
-  //draw initial ship
-  //   context.fillStyle="purple";
-  //context.fillRect(ship.x, ship.y, ship.width, ship.height);
+  // draw initial ship
+  context.fillStyle = "purple";
+  context.fillRect(ship.x, ship.y, ship.width, ship.height);
 
   // load img's
   shipImg = new Image();
@@ -74,7 +77,7 @@ window.onload = function () {
 function update() {
   requestAnimationFrame(update);
 
-  if (gameOver){
+  if (gameOver) {
     return;
   }
   context.clearRect(0, 0, board.width, board.height);
@@ -101,6 +104,8 @@ function update() {
 
       if (alien.y >= ship.y) {
         gameOver = true;
+        messageDiv.innerHTML = "GAME OVER";
+        messageDiv.removeAttribute("hidden");
       }
     }
   }
@@ -134,21 +139,21 @@ function update() {
   // next level of my game
   if (alienCount == 0) {
     //increase the number of aliens in columns and rows by 1
-    alienColumns = Math.min(alienColumns + 1, columns/2 - 2);
-   alienRows = Math.min(alienRows + 1, rows-4);   //cap at 16-4 = 12
-   alienVelocityX += 0.2; //increase movement speed of alien
-   alienArray = [];
-   bulletArray = [];
-   createAliens();                                                                                                        //the reason why im adding a min condition here is because if i keeping adding a new column of aliens im going to be passing the canvas width
-  }         
-           //score
-           context.fillStyle="white"; 
-           context.font="16px courier"; 
-           context.fillText(score, 5,  20);                                                                                                    // im going to take the number of columns divided by 2 and subtract 2 I divide by 2 because each alien width is 2 tile sizes and minus 2 so we can gurantee
-}                                                                                                                              // space for the alien so we can move left and right
+    alienColumns = Math.min(alienColumns + 1, columns / 2 - 2);
+    alienRows = Math.min(alienRows + 1, rows - 4); //cap at 16-4 = 12
+    alienVelocityX += 0.2; //increase movement speed of alien
+    alienArray = [];
+    bulletArray = [];
+    createAliens(); //the reason why im adding a min condition here is because if i keeping adding a new column of aliens im going to be passing the canvas width
+  }
+  //score
+  context.fillStyle = "white";
+  context.font = "16px courier";
+  context.fillText(score, 5, 20); // im going to take the number of columns divided by 2 and subtract 2 I divide by 2 because each alien width is 2 tile sizes and minus 2 so we can gurantee
+} // space for the alien so we can move left and right
 
 function moveShip(e) {
-  if(gameOver) {
+  if (gameOver) {
     return;
   }
   if (e.code == "ArrowLeft" && ship.x - shipVelocityX >= 0) {
@@ -211,3 +216,7 @@ function detectCollision(a, b) {
     a.y + a.height > b.y
   ); // a's bottom left corner passes b's top left corner
 }
+
+
+
+
