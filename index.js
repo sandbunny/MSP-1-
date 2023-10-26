@@ -43,8 +43,10 @@ let bulletVelocityY = -10; //bullet moving speed.... its negative 10 because we 
 
 // score for game
 let score = 0;
+// what displays after the player fails the game
 let gameOver = false;
 let messageDiv;
+let restartDiv;
 
 window.onload = function () {
   board = document.getElementById("board");
@@ -53,6 +55,8 @@ window.onload = function () {
   context = board.getContext("2d"); // used for drawing on the board
   messageDiv = document.getElementById("message");
   messageDiv.setAttribute("hidden", true);
+  restartDiv = document.getElementById("restart");
+  restartDiv.setAttribute("hidden", true);
 
   // draw initial ship
   context.fillStyle = "purple";
@@ -69,8 +73,35 @@ window.onload = function () {
   document.addEventListener("keydown", moveShip);
   document.addEventListener("keyup", shoot);
 
+  //  restart button click event listener
+  restartDiv.addEventListener("click", restartGame);
+
+  // came up with this myself it took about 3 hours to figure out to get my game to restart
+  function restartGame() {
+    // Reset game variables
+    gameOver = false;
+    score = 0;
+    restartDiv.innerHTML = "";
+    restartDiv.setAttribute("hidden", true);
+    messageDiv.setAttribute("hidden", false);
+
+    // Reset ship position, clear bullets, and recreate aliens
+
+    ship.x = shipX;
+    bulletArray = [];
+    alienArray = [];
+
+    shipVelocityX = tileSize;
+    alienVelocityX = 1;
+    alienRows = 2;
+    alienColumns = 3;
+    createAliens();
+    context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
+    // Restart the game loop
+    requestAnimationFrame(update);
+  }
   alienImg = new Image();
-  alienImg.src = "assets/alien.png";
+  alienImg.src = "assets/red.png";
   createAliens();
 };
 
@@ -104,8 +135,11 @@ function update() {
 
       if (alien.y >= ship.y) {
         gameOver = true;
-        messageDiv.innerHTML = "GAME OVER";
+        messageDiv.innerHTML = "GAME OVER"; // variables that are hidden and displayed after my game is over
         messageDiv.removeAttribute("hidden");
+        restartDiv.innerHTML = "Try Again?";
+        restartDiv.removeAttribute("hidden");
+        restartGame = true;
       }
     }
   }
@@ -158,30 +192,21 @@ function moveShip(e) {
   }
   if (e.code == "ArrowLeft" && ship.x - shipVelocityX >= 0) {
     ship.x -= shipVelocityX; // moves the ship to the left
+    console.log("left");
   } else if (
     e.code == "ArrowRight" &&
     ship.x + shipVelocityX + ship.width <= board.width
   ) {
     ship.x += shipVelocityX; // moves the ship to the right
+    console.log("right");
   }
 }
-
-// defining multiple alien images for my project
-let alienImages = [];
-let alienImage1 = new Image();
-alienImage1.src = "assets/alien.png";
-alienImages.push(alienImage1);
-
-let alienImage2 = new Image();
-alienImage2.src = "assets/red.png";
-alienImages.push(alienImage2);
 
 function createAliens() {
   for (let c = 0; c < alienColumns; c++) {
     for (let r = 0; r < alienRows; r++) {
-      let randomImageIndex = Math.floor(Math.random() * alienImages.length);
       let alien = {
-        img: alienImages[randomImageIndex],
+        img: alienImg,
         x: alienX + c * alienWidth,
         y: alienY + r * alienHeight,
         width: alienWidth,
@@ -216,6 +241,7 @@ function shoot(e) {
       used: false,
     };
     bulletArray.push(bullet);
+    console.log("bullet");
   }
 }
 
