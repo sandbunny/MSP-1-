@@ -1,4 +1,5 @@
 # MSP-1-
+
 Milestone Project
 
 Space Invaders is a 1978 shoot 'em up arcade video game developed and released by Taito in Japan, and licensed to Midway Manufacturing for overseas distribution. Space Invaders was the first fixed shooter and set the template for the genre. The goal is to defeat wave after wave of descending aliens with a horizontally moving laser to earn as many points as possible. -https://en.wikipedia.org/wiki/Space_Invaders
@@ -16,3 +17,7 @@ Chris Courses: https://youtu.be/MCVU0w73uKI?si=W6RcllGNawkXwX5F
 
 Coding With Adam: https://youtu.be/qCBiKJbLcFI?si=nGaVKxcWWA26jZN-
 
+Controls for game
+Left Arrow = move left
+Right Arrow = move right
+Spacebar = shoot
