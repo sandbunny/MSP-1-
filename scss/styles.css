@@ -1,0 +1,42 @@
+body {
+  background-color: black;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+}
+body .game-menu {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 50px;
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 20px 16px rgba(18, 185, 135, 0.76);
+  margin-top: 20px;
+}
+body #board, body #message, body #restart {
+  background-color: black;
+  color: white;
+  font-size: 24px;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 5px;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+body #board.board, body #message.board, body #restart.board {
+  width: 80%;
+  max-width: 600px;
+  height: 400px;
+}
+body #message {
+  display: none;
+}
+body #restart {
+  top: 60%;
+}
+body #restart button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}/*# sourceMappingURL=styles.css.map */

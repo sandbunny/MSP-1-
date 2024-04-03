@@ -132,7 +132,7 @@ function update() {
         }
       }
       context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
-
+// where game ends if alien touches ship
       if (alien.y >= ship.y) {
         gameOver = true;
         messageDiv.innerHTML = "GAME OVER"; // variables that are hidden and displayed after my game is over

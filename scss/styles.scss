@@ -1,0 +1,75 @@
+// Variables
+$primary-color: rgb(255, 255, 255);
+$secondary-color: rgba(18, 185, 135, 0.76);
+$board-width: 80%;
+$board-max-width: 600px; 
+$board-height: 400px; 
+
+// Mixins
+@mixin center-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin button-style {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+// Functions
+@function darken-color($color, $amount) {
+  @return darken($color, $amount);
+}
+
+// Nesting and SCSS operators
+body {
+  background-color: black;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+
+  .game-menu {
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    font-size: 50px;
+    color: $primary-color;
+    text-shadow: 2px 20px 16px $secondary-color;
+    margin-top: 20px; 
+  }
+
+  #board, #message, #restart {
+    background-color: black;
+    color: white;
+    font-size: 24px;
+    border: 2px solid $primary-color;
+    border-radius: 5px;
+    padding: 20px;
+    @include center-element;
+    text-align: center;
+
+    &.board {
+      width: $board-width;
+      max-width: $board-max-width;
+      height: $board-height;
+    }
+  }
+
+  #message {
+    display: none; 
+  }
+
+  #restart {
+    top: 60%; 
+
+    button {
+      @include button-style;
+    }
+  }
+}
+
+
+
+
+
